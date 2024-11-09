@@ -32,4 +32,8 @@ function calcolaSettimaneEMesi() {
     const immagineContainer = document.getElementById('immagine');
     const immagine = 'https://www.my-personaltrainer.it/imgs/2019/09/29/sviluppo-dell-embrione-feto-2-orig.jpeg';
     immagineContainer.innerHTML = `<img src="${immagine}" alt="Embrione o Feto">`;
+    const immagineContainer = document.getElementById('immagine');
+    const immagine = 'file:///C:/Users/info3-21/Downloads/DALL%C2%B7E%202024-11-09%2012.20.41%20-%20Create%20an%20abstract%20illustration%20of%20a%20pregnant%20woman%20using%20soft,%20flowing%20shapes%20and%20organic%20curves,%20focusing%20on%20a%20pink%20color%20palette%20with%20various%20shade.webp'; // Percorso relativo all'immagine
+    immagineContainer.innerHTML = `<img src="${immagine}" alt="Embrione o Feto">`;
+
 }
