@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolo Settimane e Mesi di Gravidanza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> <!-- Include Animate.css -->
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Font Comic Sans */
+            background-color: #fce4ec; /* Rosa chiaro */
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-image: url('https://www.pngrepo.com/download/45568/heart-icon.png'), url('https://www.pngrepo.com/download/46367/cloud.png');
+            background-position: top left, bottom right;
+            background-repeat: no-repeat, no-repeat;
+            background-size: 100px, 100px;
+            overflow-y: auto; /* Permette lo scroll verticale */
+            height: 100%; /* Assicurati che il body prenda tutta l'altezza della pagina */
+        }
+
+        h1 {
+            text-align: center;
+            color: #d81b60; /* Rosa scuro */
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background-color: #ffffff; /* Bianco */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #d81b60;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #d81b60;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #d81b60; /* Rosa scuro */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #c2185b; /* Rosa più scuro */
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8bbd0; /* Rosa chiaro */
+            border: 1px solid #d81b60;
+            border-radius: 4px;
+            font-size: 1.5em;
+            color: #d81b60;
+            text-align: center;
+        }
+
+        .heart {
+            font-size: 3em;
+            color: #d81b60;
+            margin-bottom: 20px;
+        }
+
+        .decorations {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            position: relative;
+            animation: floatDecorations 6s infinite ease-in-out;
+        }
+
+        .decoration {
+            font-size: 2em;
+            color: #d81b60;
+        }
+
+        .flower {
+            color: #f48fb1; /* Rosa pastello */
+            animation: floatFlowers 4s infinite ease-in-out;
+        }
+
+        .baby-bottle {
+            color: #ff80ab; /* Rosa baby */
+        }
+
+        .star {
+            color: #ffeb3b; /* Giallo stelle */
+        }
+
+        .cloud {
+            color: #90caf9; /* Blu chiaro */
+        }
+
+        /* Animazione cuori e fiori */
+        @keyframes floatFlowers {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes floatDecorations {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Sezione per l'immagine */
+        .image-container {
+            margin-top: 30px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .floating-heart {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 3em;
+            color: #f48fb1;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Calcola le Settimane e Mesi di Gravidanza</h1>
+    <div class="form-container">
+        <div class="heart">💖</div>
+
+        <label for="giorno">Giorno:</label>
+        <input type="number" id="giorno" min="1" max="31" required>
+
+        <label for="mese">Mese:</label>
+        <input type="number" id="mese" min="1" max="12" required>
+
+        <label for="anno">Anno:</label>
+        <input type="number" id="anno" min="1900" required>
+
+        <button onclick="calcolaSettimaneEMesi()">Calcola</button>
+
+        <div class="result animate__animated animate__fadeIn" id="risultato"></div>
+        <div class="result animate__animated animate__fadeIn" id="dataParto"></div>
+
+        <div class="image-container" id="immagine">
+            <!-- L'immagine cambierà dinamicamente, ma sarà la stessa per tutte le settimane -->
+        </div>
+
+        <div class="decorations">
+            <div class="decoration flower">🌸</div>
+            <div class="decoration baby-bottle">🍼</div>
+            <div class="decoration star">⭐</div>
+            <div class="decoration cloud">☁️</div>
+            <div class="decoration flower">🌸</div>
+        </div>
+
+        <!-- Cuore fluttuante animato -->
+        <div class="floating-heart">💖</div>
+    </div>
+
+    <script>
+        function calcolaSettimaneEMesi() {
+            // Ottieni la data inserita dall'utente
+            const giorno = parseInt(document.getElementById('giorno').value);
+            const mese = parseInt(document.getElementById('mese').value);
+            const anno = parseInt(document.getElementById('anno').value);
+
+            // Verifica che i dati siano validi
+            if (isNaN(giorno) || isNaN(mese) || isNaN(anno) || giorno < 1 || mese < 1 || mese > 12 || anno < 1900) {
+                document.getElementById('risultato').innerHTML = "Inserisci una data valida.";
+                return;
+            }
+
+            // Crea la data di inizio della gravidanza
+            const dataInizio = new Date(anno, mese - 1, giorno); // mese - 1 per compatibilità con JavaScript (0-11 per i mesi)
+
+            // Ottieni la data odierna
+            const dataOggi = new Date();
+
+            // Verifica se la data inserita è nel futuro
+            if (dataInizio > dataOggi) {
+                document.getElementById('risultato').innerHTML = "La data di inizio gravidanza non può essere nel futuro.";
+                document.getElementById('dataParto').innerHTML = "";
+                document.getElementById('immagine').innerHTML = "";
+                return;
+            }
+
+            // Calcola la differenza in millisecondi
+            const differenza = dataOggi - dataInizio;
+
+            // Converti la differenza in giorni
+            const giorniTrascorsi = Math.floor(differenza / (1000 * 60 * 60 * 24));
+
+            // Calcola le settimane
+            const settimane = Math.floor(giorniTrascorsi / 7);
+
+            // Calcola i mesi (approssimativamente)
+            const mesi = (settimane / 4.3).toFixed(1); // Utilizziamo 4.3 settimane per mese
+
+            // Calcola la data di parto stimata (aggiungendo 40 settimane)
+            const dataParto = new Date(dataInizio);
+            dataParto.setDate(dataInizio.getDate() + (40 * 7)); // Aggiungi 40 settimane
+
+            // Mostra i risultati
+            document.getElementById('risultato').innerHTML = `Hai completato ${settimane} settimane, ovvero circa ${mesi} mesi di gravidanza.`;
+            document.getElementById('dataParto').innerHTML = `Data stimata del parto: ${dataParto.toLocaleDateString('it-IT')}`;
+
+            // Aggiungi l'immagine del feto/embrione
+            const immagineContainer = document.getElementById('immagine');
+            const immagine = 'https://www.my-personaltrainer.it/imgs/2019/09/29/sviluppo-dell-embrione-feto-2-orig.jpeg';
+            immagineContainer.innerHTML = `<img src="${immagine}" alt="Embrione o Feto">`;
+        }
+    </script>
+</body>
+</html>
